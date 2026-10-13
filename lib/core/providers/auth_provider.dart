@@ -236,7 +236,7 @@ class AuthNotifier extends Notifier<AuthState> {
   Future<bool> loginWithGoogle() async {
     final googleSignIn = GoogleSignIn(
       scopes: ['email', 'profile'],
-      serverClientId: '293181909519-ca83elb1tee2g9ndilv669jt9k7vr1vp.apps.googleusercontent.com',
+      serverClientId: '711076732273-571552lb6kbbe8upf1oj2q6u66roai9o.apps.googleusercontent.com',
     );
     final account = await googleSignIn.signIn();
     if (account == null) return false;

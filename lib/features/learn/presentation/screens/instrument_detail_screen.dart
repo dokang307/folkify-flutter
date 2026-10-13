@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/widgets/upgrade_sheet.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_text_styles.dart';
@@ -188,9 +189,13 @@ class _InstrumentDetailScreenState
       separatorBuilder: (_, i) => const SizedBox(height: 12),
       itemBuilder: (context, index) {
         final lesson = inst.lessons[index];
-        final isFirst = index == 0;
+        // Bài "học tiếp" = bài mở khóa đầu tiên chưa hoàn thành
+        final nextIndex = inst.lessons.indexWhere((l) => !l.locked && !l.completed);
+        final isFirst = index == nextIndex;
         return GestureDetector(
-          onTap: () => context.go('/learn/${inst.id}/lesson/${lesson.id}'),
+          onTap: () => lesson.locked
+              ? showUpgradeSheet(context, requiredPlan: lesson.requiredPlan)
+              : context.go('/learn/${inst.id}/lesson/${lesson.id}'),
           child: Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -211,12 +216,16 @@ class _InstrumentDetailScreenState
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Center(
-                    child: isFirst
-                        ? FaIcon(FontAwesomeIcons.play, color: Colors.white, size: 22)
-                        : Text(
-                            '${index + 1}',
-                            style: AppTextStyles.titleLarge.copyWith(color: AppColors.textMuted),
-                          ),
+                    child: lesson.locked
+                        ? FaIcon(FontAwesomeIcons.lock, color: AppColors.textMuted, size: 18)
+                        : lesson.completed
+                            ? FaIcon(FontAwesomeIcons.check, color: AppColors.success, size: 20)
+                            : isFirst
+                                ? FaIcon(FontAwesomeIcons.play, color: Colors.white, size: 22)
+                                : Text(
+                                    '${index + 1}',
+                                    style: AppTextStyles.titleLarge.copyWith(color: AppColors.textMuted),
+                                  ),
                   ),
                 ),
                 const SizedBox(width: 14),
@@ -239,6 +248,9 @@ class _InstrumentDetailScreenState
                   ),
                 ),
                 const SizedBox(width: 8),
+                if (lesson.locked)
+                  PlanLockBadge(plan: lesson.requiredPlan)
+                else
                 Column(
                   children: [
                     Text('+${lesson.xp}', style: AppTextStyles.bodySmall.copyWith(color: AppColors.primary, fontWeight: FontWeight.w700)),

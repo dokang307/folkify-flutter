@@ -18,6 +18,8 @@ import '../../features/premium/presentation/screens/premium_plans_screen.dart';
 import '../../features/premium/presentation/screens/pay2s_checkout_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/profile/presentation/screens/change_password_screen.dart';
+import '../../features/learn/presentation/screens/quiz_screen.dart';
+import '../../features/scoring/presentation/scoring_screen.dart';
 import '../widgets/main_shell.dart';
 import '../providers/auth_provider.dart';
 
@@ -96,7 +98,18 @@ final routerProvider = Provider<GoRouter>((ref) {
               lessonId: s.pathParameters['lessonId']!,
             )),
           ),
+          GoRoute(
+            path: '/learn/:id/lesson/:lessonId/quiz',
+            builder: (_, s) => QuizScreen(
+              instrumentId: s.pathParameters['id']!,
+              lessonId: s.pathParameters['lessonId']!,
+            ),
+          ),
           GoRoute(path: '/practice', pageBuilder: (_, s) => NoTransitionPage(key: s.pageKey, child: const PracticeScreen())),
+          GoRoute(
+            path: '/practice/ai',
+            builder: (_, s) => ScoringScreen(initialInstrument: s.uri.queryParameters['instrument']),
+          ),
           GoRoute(path: '/sheets', pageBuilder: (_, s) => NoTransitionPage(key: s.pageKey, child: const SheetMusicScreen())),
           GoRoute(path: '/premium', pageBuilder: (_, s) => NoTransitionPage(key: s.pageKey, child: const PremiumPlansScreen())),
           GoRoute(path: '/profile', pageBuilder: (_, s) => NoTransitionPage(key: s.pageKey, child: const ProfileScreen())),

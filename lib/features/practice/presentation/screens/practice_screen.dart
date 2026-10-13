@@ -5,7 +5,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_text_styles.dart';
-import '../../../../core/providers/auth_provider.dart';
 
 class PracticeScreen extends ConsumerStatefulWidget {
   const PracticeScreen({super.key});
@@ -209,10 +208,8 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
                   ] else if (_selectedTab == 1)
                     _buildQuizTab()
                   else
-                    // AI Pitch chỉ dành cho gói PRO.
-                    (ref.watch(authStateProvider).isPro
-                        ? _buildAiPitchTab()
-                        : _buildProLocked()),
+                    // Quyền dùng AI do màn /practice/ai kiểm tra theo quota từng gói (BASIC/PRO).
+                    _buildAiPitchTab(),
                   const SizedBox(height: 100),
                 ],
               ),
@@ -1018,55 +1015,34 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
   }
 
   /// Màn khóa khi user chưa có gói PRO — mời nâng cấp.
-  Widget _buildProLocked() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border, width: 0.5),
-      ),
-      child: Column(
-        children: [
-          Container(
-            width: 64,
-            height: 64,
-            decoration: BoxDecoration(
-              color: AppColors.planPro.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            alignment: Alignment.center,
-            child: FaIcon(FontAwesomeIcons.lock, color: AppColors.planPro, size: 26),
-          ),
-          const SizedBox(height: 16),
-          Text('Tính năng của gói PRO',
-              style: AppTextStyles.titleMedium.copyWith(fontWeight: FontWeight.w700),
-              textAlign: TextAlign.center),
-          const SizedBox(height: 8),
-          Text(
-            'Luyện tập AI Pitch giúp bạn kiểm tra cao độ theo thời gian thực. '
-            'Nâng cấp lên gói PRO để mở khóa.',
-            style: AppTextStyles.bodySmall.copyWith(color: AppColors.textMuted),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 20),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton.icon(
-              onPressed: () => context.push('/premium'),
-              icon: const FaIcon(FontAwesomeIcons.crown, size: 14, color: Colors.white),
-              label: const Text('Nâng cấp lên PRO'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.planPro,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+  Widget _buildAiScoringEntry() {
+    return InkWell(
+      borderRadius: BorderRadius.circular(16),
+      onTap: () => context.go('/practice/ai'),
+      child: Container(
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(colors: [AppColors.primary, AppColors.primaryDark]),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Row(
+          children: [
+            const FaIcon(FontAwesomeIcons.microphoneLines, color: Colors.white, size: 26),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Trình diễn tác phẩm & AI chấm điểm', style: AppTextStyles.titleMedium.copyWith(color: Colors.white)),
+                  const SizedBox(height: 2),
+                  Text('Chọn tác phẩm, chơi một đoạn hoặc cả bài — AI chấm cao độ, nhịp, độ ổn định',
+                      style: AppTextStyles.bodySmall.copyWith(color: Colors.white70)),
+                ],
               ),
             ),
-          ),
-        ],
+            const FaIcon(FontAwesomeIcons.chevronRight, color: Colors.white, size: 14),
+          ],
+        ),
       ),
     );
   }
@@ -1079,6 +1055,8 @@ class _PracticeScreenState extends ConsumerState<PracticeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        _buildAiScoringEntry(),
+        const SizedBox(height: 16),
         // AI Performance card
         Container(
           padding: const EdgeInsets.all(18),

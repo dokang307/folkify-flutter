@@ -9,7 +9,13 @@ class Lesson {
   final List<String> tips;
   final int xp;
   final String? youtubeUrl;
+  final String? youtubeVideoId;
+  final String? channelName;
   final bool completed;
+  /// Gói tối thiểu để mở bài: FREE / BASIC / PRO.
+  final String requiredPlan;
+  /// Backend đã tính sẵn theo gói hiệu lực của user.
+  final bool locked;
 
   const Lesson({
     required this.id,
@@ -22,7 +28,11 @@ class Lesson {
     required this.tips,
     required this.xp,
     this.youtubeUrl,
+    this.youtubeVideoId,
+    this.channelName,
     this.completed = false,
+    this.requiredPlan = 'FREE',
+    this.locked = false,
   });
 
   factory Lesson.fromSummaryJson(Map<String, dynamic> json) => Lesson(
@@ -35,6 +45,9 @@ class Lesson {
         steps: const [],
         tips: const [],
         xp: json['xp'] as int? ?? 0,
+        completed: json['completed'] as bool? ?? false,
+        requiredPlan: json['requiredPlan'] as String? ?? 'FREE',
+        locked: json['locked'] as bool? ?? false,
       );
 
   factory Lesson.fromDetailJson(Map<String, dynamic> json) => Lesson(
@@ -48,6 +61,9 @@ class Lesson {
         tips: (json['tips'] as List?)?.map((e) => e as String).toList() ?? const [],
         xp: json['xp'] as int? ?? 0,
         youtubeUrl: json['youtubeUrl'] as String?,
+        youtubeVideoId: json['youtubeVideoId'] as String?,
+        channelName: json['channelName'] as String?,
+        requiredPlan: json['requiredPlan'] as String? ?? 'FREE',
       );
 }
 

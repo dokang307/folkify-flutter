@@ -1,0 +1,43 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(flutter devices *)",
+      "Bash(flutter emulators *)",
+      "Bash(xcrun simctl *)",
+      "Bash(flutter doctor *)",
+      "WebFetch(domain:mobile-app-for-learning-instruments.vercel.app)",
+      "Bash(flutter pub *)",
+      "Bash(flutter analyze *)",
+      "Bash(sed -i '' 's/\\(_, __, ___\\) =>/\\(_, a, b\\) =>/g; s/separatorBuilder: \\(_, __\\) =>/separatorBuilder: \\(_, i\\) =>/g' /Users/chip/folkify_flutter/lib/features/learn/presentation/screens/instrument_detail_screen.dart)",
+      "Bash(sed -i '' 's/separatorBuilder: \\(_, __\\) =>/separatorBuilder: \\(_, i\\) =>/g' /Users/chip/folkify_flutter/lib/features/sheets/presentation/screens/sheet_music_screen.dart)",
+      "Bash(sed -n '140,155p')",
+      "Bash(sed -n '143,152p' /Users/chip/folkify_flutter/lib/features/sheets/presentation/screens/sheet_music_screen.dart)",
+      "Bash(flutter build *)",
+      "Bash(dart analyze *)",
+      "WebFetch(domain:pub.dev)",
+      "Bash(sed -n '195,205p' /Users/chip/folkify_flutter/lib/features/auth/presentation/screens/login_screen.dart)",
+      "Bash(sed -n '113,120p' /Users/chip/folkify_flutter/lib/features/auth/presentation/screens/forgot_password_screen.dart)",
+      "Bash(sed -n '210,230p' /Users/chip/folkify_flutter/lib/features/profile/presentation/screens/profile_screen.dart)",
+      "Bash(sed -n '177,183p' /Users/chip/folkify_flutter/lib/features/auth/presentation/screens/register_screen.dart)",
+      "Bash(sed -n '291,296p' /Users/chip/folkify_flutter/lib/features/learn/presentation/screens/instrument_detail_screen.dart)",
+      "Bash(sed -n '142,147p' /Users/chip/folkify_flutter/lib/features/learn/presentation/screens/learn_screen.dart)",
+      "Bash(sed -n '308,335p' /Users/chip/folkify_flutter/lib/features/practice/presentation/screens/practice_screen.dart)",
+      "Bash(sed -n '120,126p' /Users/chip/folkify_flutter/lib/features/premium/presentation/screens/premium_plans_screen.dart)",
+      "Bash(perl -i -0pe 's/icon: Icon\\\\\\(\\\\s*\\\\n\\(\\\\s+\\)\\(_obscureConfirm \\\\? FontAwesomeIcons\\)/icon: FaIcon\\(\\\\n$1$2/g' /Users/chip/folkify_flutter/lib/features/auth/presentation/screens/register_screen.dart)",
+      "Bash(sed -i '' 's/Icon\\(item\\\\.\\\\$3,/FaIcon\\(item.$3,/' /Users/chip/folkify_flutter/lib/features/learn/presentation/screens/instrument_detail_screen.dart)",
+      "Bash(sed -i '' 's/i\\) => Icon\\(/i\\) => FaIcon\\(/' /Users/chip/folkify_flutter/lib/features/learn/presentation/screens/learn_screen.dart)",
+      "Bash(sed -i '' 's/icon: Icon\\(_isPlaying ? FontAwesomeIcons/icon: FaIcon\\(_isPlaying ? FontAwesomeIcons/' /Users/chip/folkify_flutter/lib/features/practice/presentation/screens/practice_screen.dart)",
+      "Bash(sed -i '' 's/Widget _iconButton\\(IconData icon,/Widget _iconButton\\(FaIconData icon,/' /Users/chip/folkify_flutter/lib/features/practice/presentation/screens/practice_screen.dart)",
+      "Bash(sed -n '155,165p' /Users/chip/folkify_flutter/lib/features/practice/presentation/screens/practice_screen.dart)",
+      "Bash(sed -n '345,360p' /Users/chip/folkify_flutter/lib/features/practice/presentation/screens/practice_screen.dart)",
+      "Bash(perl *)",
+      "Bash(sed -n '103,115p' /Users/chip/folkify_flutter/lib/features/practice/presentation/screens/practice_screen.dart)",
+      "Bash(sed -n '52,65p' /Users/chip/folkify_flutter/lib/features/learn/presentation/screens/learn_screen.dart)",
+      "Bash(grep -n \"Stats\\\\|stats\\\\|🔥\\\\|⭐\\\\|\\\\.\\\\$1\\\\|\\\\.\\\\$2\\\\|\\\\.\\\\$3\\\\|tuple\\\\|record\" /Users/chip/folkify_flutter/lib/features/home/presentation/screens/home_screen.dart)",
+      "Bash(dart run *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)"
+    ]
+  }
+}

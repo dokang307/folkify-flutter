@@ -7,10 +7,13 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_text_styles.dart';
 import '../../../../core/providers/instrument_provider.dart';
 import '../../../../core/providers/progress_provider.dart';
+import '../../../../core/services/api_error.dart';
 import '../../../../core/services/progress_service.dart';
 import '../../../../core/widgets/celebration_overlay.dart';
 import '../../../../core/widgets/gradient_button.dart';
+import '../../../../core/widgets/upgrade_sheet.dart';
 import '../../domain/models/instrument.dart';
+import '../widgets/lesson_video.dart';
 
 class LessonDetailScreen extends ConsumerStatefulWidget {
   final String instrumentId;
@@ -79,12 +82,14 @@ class _LessonDetailScreenState extends ConsumerState<LessonDetailScreen> {
             onPressed: () => context.go('/learn/${widget.instrumentId}'),
           ),
         ),
-        body: Center(
+        body: err is ApiError && err.isPlanGate
+            ? _buildLockedView(context, err)
+            : Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Không tải được bài học',
-                  style: AppTextStyles.bodyMedium),
+              Text(err is ApiError ? err.message : 'Không tải được bài học',
+                  style: AppTextStyles.bodyMedium, textAlign: TextAlign.center),
               const SizedBox(height: 12),
               TextButton(
                 onPressed: () => ref.invalidate(lessonDetailProvider((
@@ -174,6 +179,8 @@ class _LessonDetailScreenState extends ConsumerState<LessonDetailScreen> {
                   const SizedBox(height: 24),
                   _buildTipsSection(lesson),
                 ],
+                const SizedBox(height: 24),
+                _buildQuizCard(context),
                 const SizedBox(height: 32),
               ],
             ),
@@ -217,35 +224,72 @@ class _LessonDetailScreenState extends ConsumerState<LessonDetailScreen> {
     );
   }
 
-  Widget _buildVideoPlaceholder(Lesson lesson) {
-    if (lesson.youtubeUrl != null && lesson.youtubeUrl!.isNotEmpty) {
-      return Container(
-        height: 200,
+  Widget _buildLockedView(BuildContext context, ApiError err) {
+    final requiredPlan = ref
+            .watch(instrumentDetailProvider(widget.instrumentId))
+            .valueOrNull
+            ?.lessons
+            .where((l) => l.id == widget.lessonId)
+            .firstOrNull
+            ?.requiredPlan ??
+        'BASIC';
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            FaIcon(FontAwesomeIcons.lock, color: AppColors.textMuted, size: 40),
+            const SizedBox(height: 16),
+            Text(err.message, style: AppTextStyles.titleMedium, textAlign: TextAlign.center),
+            const SizedBox(height: 24),
+            GradientButton(
+              text: 'Mở khóa bài học',
+              icon: FontAwesomeIcons.crown,
+              onPressed: () => showUpgradeSheet(context, requiredPlan: requiredPlan),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildQuizCard(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(16),
+      onTap: () => context.go('/learn/${widget.instrumentId}/lesson/${widget.lessonId}/quiz'),
+      child: Container(
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.black,
+          color: AppColors.primary.withValues(alpha: 0.08),
           borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppColors.primary.withValues(alpha: 0.3), width: 0.5),
         ),
-        child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 60,
-                height: 60,
-                decoration: const BoxDecoration(
-                  color: AppColors.primary,
-                  shape: BoxShape.circle,
-                ),
-                alignment: Alignment.center,
-                child: FaIcon(FontAwesomeIcons.play,
-                    color: Colors.white, size: 32),
+        child: Row(
+          children: [
+            FaIcon(FontAwesomeIcons.penToSquare, color: AppColors.primary, size: 22),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Câu hỏi ôn tập', style: AppTextStyles.titleMedium),
+                  const SizedBox(height: 2),
+                  Text('Đạt từ 70% để hoàn thành bài và nhận XP', style: AppTextStyles.bodySmall),
+                ],
               ),
-              const SizedBox(height: 8),
-              Text('Xem video hướng dẫn', style: AppTextStyles.bodyMedium),
-            ],
-          ),
+            ),
+            FaIcon(FontAwesomeIcons.chevronRight, color: AppColors.textMuted, size: 14),
+          ],
         ),
-      );
+      ),
+    );
+  }
+
+  Widget _buildVideoPlaceholder(Lesson lesson) {
+    final videoId = LessonVideo.resolveId(lesson.youtubeVideoId, lesson.youtubeUrl);
+    if (videoId != null) {
+      return LessonVideo(videoId: videoId, channelName: lesson.channelName);
     }
     return Container(
       height: 160,

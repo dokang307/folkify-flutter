@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'api_client.dart';
+import 'api_error.dart';
 import 'auth_service.dart';
 import '../../features/learn/domain/models/instrument.dart';
 
@@ -35,7 +36,8 @@ class InstrumentService {
       return Lesson.fromDetailJson(
           res.data['result'] as Map<String, dynamic>);
     } on DioException catch (e) {
-      throw AuthException(_extractMessage(e));
+      // Giữ mã lỗi (1106 = cần nâng cấp gói) để màn bài học hiện paywall
+      throw ApiError.fromDio(e);
     }
   }
 

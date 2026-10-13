@@ -140,7 +140,7 @@ class _PremiumPlansScreenState extends ConsumerState<PremiumPlansScreen> {
               children: [
                 GestureDetector(
                   onTap: () => launchUrl(
-                    Uri.parse('https://folkify.vn/privacy'),
+                    Uri.parse('https://folkify-landingpage.vercel.app/privacy'),
                     mode: LaunchMode.externalApplication,
                   ),
                   child: Text(
@@ -162,7 +162,7 @@ class _PremiumPlansScreenState extends ConsumerState<PremiumPlansScreen> {
                 ),
                 GestureDetector(
                   onTap: () => launchUrl(
-                    Uri.parse('https://folkify.vn/terms'),
+                    Uri.parse('https://folkify-landingpage.vercel.app/terms'),
                     mode: LaunchMode.externalApplication,
                   ),
                   child: Text(

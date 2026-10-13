@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Folkify cần micro để ghi âm phần trình diễn nhạc cụ và chấm điểm.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Cho phép Folkify lưu mã QR thanh toán vào thư viện ảnh của bạn.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
